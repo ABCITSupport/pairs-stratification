@@ -133,19 +133,30 @@ class ScalableApp(tb.Window):
         # Set the window icon
         self.iconbitmap("resources\\PairsStratificationAppIco.ico")
 
+        root.bind("<Configure>", self.on_window_change)
+
         # Fall into a loop, processing user actions through the UI
         self.mainloop()
 
     def on_window_change(self, event):
         # Query the actual physical pixels per inch currently assigned to this window
+
+        def get_system_dpi():
+            import ctypes
+            # Reads actual system DPI without being affected by 'tk scaling'
+            try:
+                return float(ctypes.windll.user32.GetDpiForWindow(self.winfo_id()))
+            except AttributeError:
+                return float(ctypes.windll.user32.GetDpiForSystem())
+
         # 96 pixels per inch = 100% scale in Windows.
-        current_pixels_per_inch = self.winfo_fpixels('1i')
+        current_pixels_per_inch = get_system_dpi()
 
         if self.current_dpi != current_pixels_per_inch:
             self.current_dpi = current_pixels_per_inch
 
             # Dynamically update Tk's internal font and asset renderer target
-            scale_factor = current_pixels_per_inch / 96.0
+            scale_factor = current_pixels_per_inch / 72.0
             self.tk.call('tk', 'scaling', scale_factor)
 
     # Helper to highlight a link in the menu when the user hovers over it
