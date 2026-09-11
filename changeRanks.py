@@ -33,10 +33,10 @@ class changeRanks(baseUIClass):
     def construct(self, pagebgnd):
         self.pagebgnd = pagebgnd
 
-        # Column 0: Canvas (Holds left content; stays at natural content width)
+        # Column 0: Canvas (Holds left content; stays at natural content width, reset any scaled behaviours)
         # Column 1: Right Fixed Frame (Takes ALL remaining space)
         self.frame.grid_rowconfigure(0, weight=1)
-        self.frame.grid_columnconfigure(0, weight=0)  # Left content fits naturally
+        self.frame.grid_columnconfigure(0, weight=0, minsize=0, pad=0, uniform="")  # Left content fits naturally
         self.frame.grid_columnconfigure(1, weight=1)  # Right frame fills remaining space
 
         # Scrollable Canvas Setup
@@ -181,7 +181,7 @@ class changeRanks(baseUIClass):
 
         self.backButton.place(x=self.uiparts.scale_factor * 630, y=self.uiparts.scale_factor * 650)
         self.nextButton.place(x=self.uiparts.scale_factor * 730, y=self.uiparts.scale_factor * 650)
-                
+
     def backPressed(self):
         self.uiparts.root.showPage('select')
 

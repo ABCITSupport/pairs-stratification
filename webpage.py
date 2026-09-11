@@ -58,6 +58,8 @@ class webpage(baseUIClass):
             else:
                 self.outputFileVar.set("")
 
+        self.frame.grid_columnconfigure(0, weight=0, minsize=self.uiparts.entry_width)
+
         self.labels = []
 
         label = tb.Label(self.frame, text="Select the new webpage file to be created.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -69,8 +71,8 @@ class webpage(baseUIClass):
         label = tb.Button(self.frame, text="Browse", bootstyle="Primary", command=lambda: self.pickOutputFile())
         label.grid(row=3, column=0, pady=self.uiparts.scaling["10"], padx=self.uiparts.scaling["20"], sticky="w")
         self.labels.append(label)
-        label = tb.Entry(self.frame, textvariable=self.outputFileVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=3, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.outputFileVar, font=("Segoe UI", 10))
+        label.grid(row=3, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Select a hand record file to include in the webpage.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -82,8 +84,8 @@ class webpage(baseUIClass):
         label = tb.Button(self.frame, text="Browse", bootstyle="Primary", command=lambda: self.pickInputFile())
         label.grid(row=7, column=0, pady=self.uiparts.scaling["10"], padx=self.uiparts.scaling["20"], sticky="w")
         self.labels.append(label)
-        label = tb.Entry(self.frame, textvariable=self.inputFileVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=7, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.inputFileVar, font=("Segoe UI", 10))
+        label.grid(row=7, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Hand Record Details:", font=("Segoe UI", 11, "bold"), justify='left')

@@ -81,6 +81,9 @@ class ScalableApp(tb.Window):
         self.uiparts.scaling["100"] = int(uiparts.scale_factor * 100)
         self.uiparts.scaling["175"] = int(uiparts.scale_factor * 175)
         self.uiparts.scaling["200"] = int(uiparts.scale_factor * 200)
+        entry_field_pixel_width = 920
+        self.uiparts.entry_width = int(entry_field_pixel_width * self.uiparts.scale_factor)
+        self.uiparts.scaled_entry_height = int(30 * self.uiparts.scale_factor)
 
         self.title(AppName + " " + AppVersion)
         scaled_w = int(1030 * uiparts.scale_factor)

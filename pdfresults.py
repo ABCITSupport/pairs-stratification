@@ -54,6 +54,8 @@ class pdfresults(baseUIClass):
             else:
                 self.outputFileVar.set("")
 
+        self.frame.grid_columnconfigure(0, weight=0, minsize=self.uiparts.entry_width)
+
         self.labels = []
 
         label = tb.Label(self.frame, text="Select the new PDF file to be created.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -65,8 +67,8 @@ class pdfresults(baseUIClass):
         label = tb.Button(self.frame, text="Browse", bootstyle="Primary", command=lambda: self.pickInputFile())
         label.grid(row=3, column=0, pady=self.uiparts.scaling["10"], padx=self.uiparts.scaling["20"], sticky="w")
         self.labels.append(label)   
-        label = tb.Entry(self.frame, textvariable=self.outputFileVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=3, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.outputFileVar, font=("Segoe UI", 10))
+        label.grid(row=3, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)   
 
         label = tb.Label(self.frame, text="Check this box to include the matchpoints matrix.", font=("Segoe UI", 11, "bold"), justify='left')

@@ -59,6 +59,8 @@ class options(baseUIClass):
     def construct(self, pagebgnd):
         self.pagebgnd = pagebgnd
 
+        self.frame.grid_columnconfigure(0, weight=0, minsize=self.uiparts.entry_width)
+
         self.labels = []
 
         label = tb.Label(self.frame, text="Select the default input USEBIO results directory.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -73,8 +75,8 @@ class options(baseUIClass):
         self.resultsPathVar = tb.StringVar()
         self.resultsPathVar.set(self._config['resultsdir'])
         self.resultsPathVar.trace_add("write", self.onParmChange)
-        label = tb.Entry(self.frame, textvariable=self.resultsPathVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=3, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.resultsPathVar, font=("Segoe UI", 10))
+        label.grid(row=3, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Select the default output directory.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -89,8 +91,8 @@ class options(baseUIClass):
         self.outputsPathVar = tb.StringVar()
         self.outputsPathVar.set(self._config['outputsdir'])
         self.outputsPathVar.trace_add("write", self.onParmChange)
-        label = tb.Entry(self.frame, textvariable=self.outputsPathVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=7, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.outputsPathVar, font=("Segoe UI", 10))
+        label.grid(row=7, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Select the default hand records directory.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -105,8 +107,8 @@ class options(baseUIClass):
         self.hrecPathVar = tb.StringVar()
         self.hrecPathVar.set(self._config['handrecordsdir'])
         self.hrecPathVar.trace_add("write", self.onParmChange)
-        label = tb.Entry(self.frame, textvariable=self.hrecPathVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=11, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.hrecPathVar, font=("Segoe UI", 10))
+        label.grid(row=11, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Select the webpage template to use.", font=("Segoe UI", 11, "bold"), justify='left')
@@ -121,8 +123,8 @@ class options(baseUIClass):
         self.webpTmplVar = tb.StringVar()
         self.webpTmplVar.set(self._config['webfiletemplate'])
         self.webpTmplVar.trace_add("write", self.onParmChange)
-        label = tb.Entry(self.frame, textvariable=self.webpTmplVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=15, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.webpTmplVar, font=("Segoe UI", 10))
+        label.grid(row=15, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Select the default stratification levels below.", font=("Segoe UI", 11, "bold"), justify='left')

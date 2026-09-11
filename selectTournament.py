@@ -32,6 +32,8 @@ class selectTournament(baseUIClass):
     def construct(self, pagebgnd: str):
         self.pagebgnd = pagebgnd
 
+        self.frame.grid_columnconfigure(0, weight=0, minsize=self.uiparts.entry_width)
+
         self.labels = []
         label = tb.Label(self.frame, text="Select a USEBIO results file for processing.", font=("Segoe UI", 11, "bold"), justify='left')
         label.grid(row=1, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["20"], 0))
@@ -42,8 +44,8 @@ class selectTournament(baseUIClass):
         label = tb.Button(self.frame, text="Browse", bootstyle="primary", command=lambda: self.pickInputFile())
         label.grid(row=3, column=0, sticky="w", padx=self.uiparts.scaling["20"], pady=self.uiparts.scaling["10"])
         self.labels.append(label)
-        label = tb.Entry(self.frame, textvariable=self.inputFileVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=3, column=0, sticky="w", padx=self.uiparts.scaling["100"])
+        label = tb.Entry(self.frame, textvariable=self.inputFileVar, font=("Segoe UI", 10))
+        label.grid(row=3, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Tournament Details:", font=("Segoe UI", 11, "bold"), justify='left')
