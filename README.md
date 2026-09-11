@@ -8,6 +8,6 @@ You can choose the ranks at which stratification occurs from the ranks of the Sc
 
 Once the ranks are chosen, you have the option to modify those to allow for visitors or players from other NBOs.
 
-More detailed information can be found in the Help installed with the program or read the markdown docs under helpsite.
+More detailed information can be found in the Help installed with the program or read the markdown docs under ./helpdocs.
 
-PLease report issues using the Issues page of this Github repository. You will find a stratlogs\stratlog.log file under your Windows user directory (e.g. C:\Users\myuser\stratlogs\stratlog.log). Please attach this to any issue you raise.
+Please report issues using the Issues page of this Github repository. You will find a stratlogs\stratlog.log file under your Windows user directory (e.g. C:\Users\myuser\stratlogs\stratlog.log). Please attach this to any issue you raise.

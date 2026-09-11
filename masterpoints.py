@@ -60,7 +60,7 @@ class masterpoints(baseUIClass):
         label.grid(row=1, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["20"], 0))
         self.labels.append(label)
 
-        label = tb.Label(self.frame, text="This file can be uploaded to MEMPAD.", font=("Segoe UI", 10), justify='left')
+        label = tb.Label(self.frame, text="This file can be uploaded to MEMPAD/Bridgewebs.", font=("Segoe UI", 10), justify='left')
         label.grid(row=2, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
