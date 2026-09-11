@@ -8,7 +8,7 @@ import ttkbootstrap as tb
 from baseclasses import AppName, AppVersion
 from uiparts import UIParts
 import webbrowser
-from tkinter import PhotoImage
+from PIL import Image, ImageTk
 
 class about:
     def __init__(self, uiparts: UIParts):
@@ -27,9 +27,9 @@ class about:
         self.about_win.iconbitmap("resources\\PairsStratificationAppIco.ico")
 
         # Define window dimensions
-        width = 480
-        height = 360
-        
+        width = int(self.uiparts.scale_factor * 480)
+        height = int(self.uiparts.scale_factor * 360)
+
         # Calculate x and y coordinates to center on the SCREEN
         screen_width = self.about_win.winfo_screenwidth()
         screen_height = self.about_win.winfo_screenheight()
@@ -47,8 +47,22 @@ class about:
 
         # Load PNG image
         # Note: PNG support is built into Tkinter 8.6+ (Python 3.4+)
-        self.logo_img = PhotoImage(file="resources\\PairsStratificationAbout.png")
+        original_pil_image = Image.open("resources\\PairsStratificationAbout.png")
         
+        # Compute the scaled dimensions based on display scaling
+        base_width, base_height = original_pil_image.size
+        scaled_width = int(base_width * self.uiparts.scale_factor)
+        scaled_height = int(base_height * self.uiparts.scale_factor)
+
+        # Resize using high-quality resampling (LANCZOS)
+        resized_pil_image = original_pil_image.resize(
+            (scaled_width, scaled_height), 
+            Image.Resampling.LANCZOS
+        )
+
+        # Convert to PhotoImage for Tkinter
+        self.logo_img = ImageTk.PhotoImage(resized_pil_image)
+
         # Image Label (CRITICAL: Keep a reference so Python's garbage collector doesn't delete it)
         self.logo_label = tb.Label(self.about_win, image=self.logo_img)
         self.logo_label.image = self.logo_img  # Reference retention
