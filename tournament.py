@@ -17,18 +17,25 @@ class tournamentContent(baseUIClass):
         Args:
             frame(Frame): tkinter Frame to display the UI in.
     """
-    def __init__(self, frame: Frame, memberDict: dict):
+    def __init__(self, frame: Frame, memberDict: dict, uiparts):
         self.frame = frame
+        self.uiparts = uiparts
         self.memberDict = memberDict
         if self.frame != None:
             self.resultsDescVar = StringVar()
 
     def construct(self, tourneybgnd: str):
+        base_pixel_width = 680
+        scaled_entry_width = int(base_pixel_width * self.uiparts.scale_factor)
+        scaled_entry_height = int(30 * self.uiparts.scale_factor)
+        self.frame.grid_columnconfigure(1, weight=0, minsize=scaled_entry_width)
+        self.frame.grid_rowconfigure(0, weight=0, minsize=scaled_entry_height)
+
         self.resultssInfoLabel1 = Label(self.frame, text="Selected Tournament:", font=("Segoe UI", 10), justify='left', bg=tourneybgnd)
-        self.resultssInfoLabel1.grid(row=0, column=0, sticky=W, padx=10)
-        self.resultsDescEntry = Entry(self.frame, textvariable=self.resultsDescVar, width=96, font=("Segoe UI", 10), bg=tourneybgnd)
+        self.resultssInfoLabel1.grid(row=0, column=0, sticky=W, padx=self.uiparts.scaling["10"])
+        self.resultsDescEntry = Entry(self.frame, textvariable=self.resultsDescVar, font=("Segoe UI", 10), bg=tourneybgnd)
         self.resultsDescEntry.config(state="readonly")
-        self.resultsDescEntry.grid(row=0, column=1, sticky=W, pady=8)
+        self.resultsDescEntry.grid(row=0, column=1, sticky="ew", padx=self.uiparts.scaling["10"])
 
     def clearContent(self):
         self.resultsDescEntry.destroy()
