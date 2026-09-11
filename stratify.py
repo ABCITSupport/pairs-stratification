@@ -27,9 +27,6 @@ MPCode = (0, 5, 10, 20,
           150, 160, 165, 170,
           180, 190, 200, 210)
 
-LEFT_TEXT_MARGIN = 110
-RIGHT_TEXT_MARGIN = 270
-
 def getMasterpointRankIndex(memberDict: dict, player1SBUNum: str, player2SBUNum: str) -> int:
     rank1 = rank2 = 'new member'
     try:
@@ -96,8 +93,6 @@ class stratify(baseUIClass):
             self.sliderStepSize = 1
             self.minRankText = tb.StringVar()
             self.maxRankText = tb.StringVar()
-            self.slider_height = 552
-            self.step_size = self.slider_height / (len(UIMPLevels) - 1)
         self.numLoads = 0
         self.minRankIndex = 0
         self.maxRankIndex = len(UIMPLevels)
@@ -209,6 +204,10 @@ class stratify(baseUIClass):
 
     def construct(self, pagebgnd):
         self.pagebgnd = pagebgnd
+
+        LEFT_TEXT_MARGIN = self.uiparts.scale_factor * 110
+        RIGHT_TEXT_MARGIN = self.uiparts.scale_factor * 270
+
         if self.last != self.tournamentData.tournamentContentInst.getDescription():
             self.last = self.tournamentData.tournamentContentInst.getDescription()
 
@@ -237,50 +236,53 @@ class stratify(baseUIClass):
         # Create labels aligned with scale
         for i, text in enumerate(UIMPLevels):
             lbl = tb.Label(self.frame, text=text, anchor="w")
-            lbl.grid(row=len(UIMPLevels) + 1 - i, column=0, sticky="w", padx=(10, 0))
+            lbl.grid(row=len(UIMPLevels) + 1 - i, column=0, sticky="w", padx=(self.uiparts.scaling["10"], 0))
             self.label_widgets.append(lbl)
 
+        slider_height = self.uiparts.scale_factor * 552
+        self.step_size = slider_height / (len(UIMPLevels) - 1)
+
         self.scaleB = tb.Scale(self.frame,
-                               from_=self.slider_height,   # reverse so top = highest
+                               from_=slider_height,   # reverse so top = highest
                                to=0,
                                orient="vertical",
                                variable=self.BSliderVar,
-                               length=self.slider_height,
+                               length=slider_height,
                                bootstyle="success",
                                command=lambda event: self.enforce_limits(None, self.BSliderVar, True)) # Uses Bootstrap theme styling directly
-        self.scaleB.grid(row=2, column=1, columnspan=1, rowspan=len(UIMPLevels), sticky="w", padx=20)
+        self.scaleB.grid(row=2, column=1, columnspan=1, rowspan=len(UIMPLevels), sticky="w", padx=self.uiparts.scaling["20"])
         self.scaleB.bind("<Button-1>", lambda event: self.handle_trough_click(event, self.BSliderVar, True))
         self.scaleB.bind("<B1-Motion>", lambda event: self.enforce_limits(event, self.BSliderVar, True))
         self.labels.append(self.scaleB)
 
         self.scaleC = tb.Scale(self.frame,
-                               from_=self.slider_height,   # reverse so top = highest
+                               from_=slider_height,   # reverse so top = highest
                                to=0,
                                orient="vertical",
                                variable=self.CSliderVar,
-                               length=self.slider_height,
+                               length=slider_height,
                                bootstyle="primary",
                                command=lambda event: self.enforce_limits(None, self.CSliderVar, False)) # Uses Bootstrap theme styling directly
-        self.scaleC.grid(row=2, column=2, columnspan=1, rowspan=len(UIMPLevels), sticky="w", padx=10)
+        self.scaleC.grid(row=2, column=2, columnspan=1, rowspan=len(UIMPLevels), sticky="w", padx=self.uiparts.scaling["10"])
         self.scaleC.bind("<Button-1>", lambda event: self.handle_trough_click(event, self.CSliderVar, False))
         self.scaleC.bind("<B1-Motion>", lambda event: self.enforce_limits(event, self.CSliderVar, False))
         self.labels.append(self.scaleC)
 
         label = tb.Label(self.frame, text="Select the strata levels", font=("Segoe UI", 11, "bold"), justify='left')
-        label.grid(row=0, column=0, columnspan=3, pady=(20, 5))
+        label.grid(row=0, column=0, columnspan=3, pady=(self.uiparts.scaling["20"], self.uiparts.scaling["5"]))
         self.labels.append(label)
         label = tb.Label(self.frame, text="A", font=("Segoe UI", 11, "bold"), justify='left', foreground=strat_AColor)
-        label.grid(row=1, column=0, sticky="w", padx=(25, 20))
+        label.grid(row=1, column=0, sticky="w", padx=(self.uiparts.scaling["25"], self.uiparts.scaling["20"]))
         self.labels.append(label)
         label = tb.Label(self.frame, text="B", font=("Segoe UI", 11, "bold"), justify='left', foreground=strat_BColor)
-        label.grid(row=1, column=1, sticky="w", padx=24)
+        label.grid(row=1, column=1, sticky="w", padx=self.uiparts.scaling["25"])
         self.labels.append(label)
         label = tb.Label(self.frame, text="C", font=("Segoe UI", 11, "bold"), justify='left', foreground=strat_CColor)
-        label.grid(row=1, column=2, sticky="w", padx=14)
+        label.grid(row=1, column=2, sticky="w", padx=self.uiparts.scaling["15"])
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="Min/Max Ranks in event", font=("Segoe UI", 10, "bold"), justify='left')
-        label.grid(row=0, column=4, sticky="w", padx=LEFT_TEXT_MARGIN, pady=(20, 0))
+        label.grid(row=0, column=4, sticky="w", padx=LEFT_TEXT_MARGIN, pady=(self.uiparts.scaling["20"], 0))
         self.labels.append(label)
         label = tb.Label(self.frame, text="Highest Rank", font=("Segoe UI", 10), justify='left')
         label.grid(row=1, column=4, sticky="w", padx=LEFT_TEXT_MARGIN)
@@ -362,7 +364,7 @@ class stratify(baseUIClass):
         self.labels.append(label)
 
         self.stratifyButton = tb.Button(self.frame, text="Stratify", bootstyle="primary", width=10, command=lambda: self.stratifyResults())
-        self.stratifyButton.place(x=408, y=460)
+        self.stratifyButton.place(x=self.uiparts.scale_factor * 408, y=self.uiparts.scale_factor * 460)
         self.labels.append(self.stratifyButton)
 
         self.statusLabel = tb.Label(self.frame, textvariable=self.statusText, font=("Segoe UI", 10, "bold"), justify='left')
@@ -373,7 +375,7 @@ class stratify(baseUIClass):
         label.grid(row=0, column=5, sticky="nw", padx=RIGHT_TEXT_MARGIN)
         self.labels.append(label)
         label = tb.Label(self.frame, text="", font=("Segoe UI", 10), justify='left')
-        label.grid(row=30, column=0, columnspan=5, sticky="nw", padx=RIGHT_TEXT_MARGIN, pady=100)
+        label.grid(row=30, column=0, columnspan=5, sticky="nw", padx=RIGHT_TEXT_MARGIN, pady=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         self.backButton = tb.Button(self.frame, text="< Back", bootstyle="primary", width=10, command=self.backPressed)
@@ -381,8 +383,8 @@ class stratify(baseUIClass):
         self.labels.append(self.backButton)
         self.labels.append(self.nextButton)
 
-        self.backButton.place(x=630, y=650)
-        self.nextButton.place(x=730, y=650)
+        self.backButton.place(x=self.uiparts.scale_factor * 630, y=self.uiparts.scale_factor * 650)
+        self.nextButton.place(x=self.uiparts.scale_factor * 730, y=self.uiparts.scale_factor * 650)
         
         # Init the labels
         self.setRange()

@@ -69,10 +69,24 @@ class ScalableApp(tb.Window):
         self.uiparts.root = self
 
         # Track the last reported scaling to avoid infinite redraw loops
-        self.current_dpi = None
+        self.current_dpi = self.get_system_dpi()
+
+        # Setup scaling factors to keep UI parts consistent
+        uiparts.scale_factor = self.current_dpi / 96.0
+        self.uiparts.scaling["5"] = uiparts.scale_factor * 5
+        self.uiparts.scaling["10"] = uiparts.scale_factor * 10
+        self.uiparts.scaling["15"] = uiparts.scale_factor * 15
+        self.uiparts.scaling["20"] = uiparts.scale_factor * 20
+        self.uiparts.scaling["25"] = uiparts.scale_factor * 25
+        self.uiparts.scaling["100"] = uiparts.scale_factor * 100
+        self.uiparts.scaling["175"] = uiparts.scale_factor * 175
+        self.uiparts.scaling["200"] = uiparts.scale_factor * 200
 
         self.title(AppName + " " + AppVersion)
-        self.geometry("1030x750")
+        scaled_w = int(1030 * uiparts.scale_factor)
+        scaled_h = int(750 * uiparts.scale_factor)
+        
+        self.geometry(f"{scaled_w}x{scaled_h}")
         self.resizable(False, False)
         
         # Split the window up into two horizontally arranged panes
@@ -138,19 +152,19 @@ class ScalableApp(tb.Window):
         # Fall into a loop, processing user actions through the UI
         self.mainloop()
 
+    def get_system_dpi(self):
+        import ctypes
+        # Reads actual system DPI without being affected by 'tk scaling'
+        try:
+            return float(ctypes.windll.user32.GetDpiForWindow(self.winfo_id()))
+        except AttributeError:
+            return float(ctypes.windll.user32.GetDpiForSystem())
+
+
     def on_window_change(self, event):
         # Query the actual physical pixels per inch currently assigned to this window
-
-        def get_system_dpi():
-            import ctypes
-            # Reads actual system DPI without being affected by 'tk scaling'
-            try:
-                return float(ctypes.windll.user32.GetDpiForWindow(self.winfo_id()))
-            except AttributeError:
-                return float(ctypes.windll.user32.GetDpiForSystem())
-
         # 96 pixels per inch = 100% scale in Windows.
-        current_pixels_per_inch = get_system_dpi()
+        current_pixels_per_inch = self.get_system_dpi()
 
         if self.current_dpi != current_pixels_per_inch:
             self.current_dpi = current_pixels_per_inch
