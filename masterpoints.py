@@ -52,30 +52,32 @@ class masterpoints(baseUIClass):
             else:
                 self.outputFileVar.set("")
 
+        self.frame.grid_columnconfigure(0, weight=0, minsize=self.uiparts.entry_width)
+
         self.labels = []
 
         label = tb.Label(self.frame, text="Select the new USEBIO format results file to be created.", font=("Segoe UI", 11, "bold"), justify='left')
-        label.grid(row=1, column=0, columnspan=2, sticky="w", padx=20, pady=(20, 0))
+        label.grid(row=1, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["20"], 0))
         self.labels.append(label)
 
         label = tb.Label(self.frame, text="This file can be uploaded to MEMPAD.", font=("Segoe UI", 10), justify='left')
-        label.grid(row=2, column=0, columnspan=2, sticky="w", padx=20)
+        label.grid(row=2, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = tb.Button(self.frame, text="Browse", bootstyle="primary", command=lambda: self.pickInputFile())
-        label.grid(row=3, column=0, pady=10, padx=20, sticky="w")
+        label.grid(row=3, column=0, pady=self.uiparts.scaling["10"], padx=self.uiparts.scaling["20"], sticky="w")
         self.labels.append(label)
 
-        label = tb.Entry(self.frame, textvariable=self.outputFileVar, width=102, font=("Segoe UI", 10))
-        label.grid(row=3, column=0, sticky="w", padx=100)
+        label = tb.Entry(self.frame, textvariable=self.outputFileVar, font=("Segoe UI", 10))
+        label.grid(row=3, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
         self.createButton = tb.Button(self.frame, text="Create", bootstyle="primary", state="disabled", command=lambda: self.writeMasterpointsFile())
-        self.createButton.grid(row=4, column=0, sticky="w", padx=20, pady=(20, 10))
+        self.createButton.grid(row=4, column=0, sticky="w", padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["20"], self.uiparts.scaling["10"]))
         self.labels.append(self.createButton)
 
         self.completeLabel = tb.Label(self.frame, text="", font=("Segoe UI", 10, "bold"), foreground=msg_completeColor, justify='left')
-        self.completeLabel.grid(row=6, column=0, columnspan=2, sticky="w", padx=20, pady=10)
+        self.completeLabel.grid(row=6, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"], pady=self.uiparts.scaling["10"])
         self.labels.append(self.completeLabel)
 
         self.backButton = tb.Button(self.frame, text="< Back", bootstyle="primary", width=10, command=self.backPressed)
@@ -83,8 +85,8 @@ class masterpoints(baseUIClass):
         self.labels.append(self.backButton)
         self.labels.append(self.nextButton)
 
-        self.backButton.place(x=630, y=650)
-        self.nextButton.place(x=730, y=650)
+        self.backButton.place(x=self.uiparts.scale_factor * 630, y=self.uiparts.scale_factor * 650)
+        self.nextButton.place(x=self.uiparts.scale_factor * 730, y=self.uiparts.scale_factor * 650)
         
         self.fileSelected('', '', '')
         

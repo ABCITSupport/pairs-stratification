@@ -69,10 +69,27 @@ class ScalableApp(tb.Window):
         self.uiparts.root = self
 
         # Track the last reported scaling to avoid infinite redraw loops
-        self.current_dpi = None
+        self.current_dpi = self.get_system_dpi()
+
+        # Setup scaling factors to keep UI parts consistent
+        uiparts.scale_factor = self.current_dpi / 96.0
+        self.uiparts.scaling["5"] = int(uiparts.scale_factor * 5)
+        self.uiparts.scaling["10"] = int(uiparts.scale_factor * 10)
+        self.uiparts.scaling["15"] = int(uiparts.scale_factor * 15)
+        self.uiparts.scaling["20"] = int(uiparts.scale_factor * 20)
+        self.uiparts.scaling["25"] = int(uiparts.scale_factor * 25)
+        self.uiparts.scaling["100"] = int(uiparts.scale_factor * 100)
+        self.uiparts.scaling["175"] = int(uiparts.scale_factor * 175)
+        self.uiparts.scaling["200"] = int(uiparts.scale_factor * 200)
+        entry_field_pixel_width = 920
+        self.uiparts.entry_width = int(entry_field_pixel_width * self.uiparts.scale_factor)
+        self.uiparts.scaled_entry_height = int(30 * self.uiparts.scale_factor)
 
         self.title(AppName + " " + AppVersion)
-        self.geometry("1030x750")
+        scaled_w = int(1030 * uiparts.scale_factor)
+        scaled_h = int(750 * uiparts.scale_factor)
+        
+        self.geometry(f"{scaled_w}x{scaled_h}")
         self.resizable(False, False)
         
         # Split the window up into two horizontally arranged panes
@@ -99,9 +116,9 @@ class ScalableApp(tb.Window):
         contentFrame.grid(row=1, column=1, sticky=NSEW)
 
         # Create the parts of the UI window and construct them
-        uiparts.mainMenu = menu(menuFrame)
-        uiparts.tournamentDisplay = tournament.tournamentContent(tournamentFrame, memberDict)
-        uiparts.mainDisplay = mainContent(contentFrame)
+        uiparts.mainMenu = menu(menuFrame, uiparts)
+        uiparts.tournamentDisplay = tournament.tournamentContent(tournamentFrame, memberDict, uiparts)
+        uiparts.mainDisplay = mainContent(contentFrame, uiparts)
         uiparts.mainDisplay.construct(app_pagebgnd)
         uiparts.tournamentDisplay.construct(app_tourneybgnd)
 
@@ -133,19 +150,30 @@ class ScalableApp(tb.Window):
         # Set the window icon
         self.iconbitmap("resources\\PairsStratificationAppIco.ico")
 
+        root.bind("<Configure>", self.on_window_change)
+
         # Fall into a loop, processing user actions through the UI
         self.mainloop()
+
+    def get_system_dpi(self):
+        import ctypes
+        # Reads actual system DPI without being affected by 'tk scaling'
+        try:
+            return float(ctypes.windll.user32.GetDpiForWindow(self.winfo_id()))
+        except AttributeError:
+            return float(ctypes.windll.user32.GetDpiForSystem())
+
 
     def on_window_change(self, event):
         # Query the actual physical pixels per inch currently assigned to this window
         # 96 pixels per inch = 100% scale in Windows.
-        current_pixels_per_inch = self.winfo_fpixels('1i')
+        current_pixels_per_inch = self.get_system_dpi()
 
         if self.current_dpi != current_pixels_per_inch:
             self.current_dpi = current_pixels_per_inch
 
             # Dynamically update Tk's internal font and asset renderer target
-            scale_factor = current_pixels_per_inch / 96.0
+            scale_factor = current_pixels_per_inch / 72.0
             self.tk.call('tk', 'scaling', scale_factor)
 
     # Helper to highlight a link in the menu when the user hovers over it
@@ -222,9 +250,11 @@ class menu:
 
         Args:
             frame(Frame): tkinter Frame to display the UI in.
+            uiparts(UiParts): Instance of the UI parts container.
     """
-    def __init__(self, frame: Frame):
+    def __init__(self, frame: Frame, uiparts):
         self.frame = frame
+        self.uiparts = uiparts
         self.homeMenuColor = self.selectMenuColor = self.optionsMenuColor = self.helpMenuColor = self.aboutMenuColor = app_menucolor
         self.stratifyMenuColor = self.printMenuColor = self.writeFileMenuColor = self.webpageMenuColor = self.changeRanksMenuColor = app_menuDisabledcolor
         self.linkHiliteColor = self.writeFileHiliteColor =  app_menuDisabledcolor
@@ -234,27 +264,27 @@ class menu:
     def construct(self):
         global root
         self.spacerLabel = Label(self.frame, text="", bg=app_menubgnd)
-        self.spacerLabel.grid(row=0, column=0, sticky=N, pady=2)
+        self.spacerLabel.grid(row=0, column=0, sticky=N, pady=self.uiparts.scaling["5"])
         self.homeLabel = Label(self.frame, text="Home", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.homeMenuColor, bg=app_menubgnd)
-        self.homeLabel.grid(row=1, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.homeLabel.grid(row=1, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.selectLabel = Label(self.frame, text="Select Tournament", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.selectMenuColor, bg=app_menubgnd)
-        self.selectLabel.grid(row=2, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.selectLabel.grid(row=2, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.changeRanksLabel = Label(self.frame, text="Change Player Ranks", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.changeRanksMenuColor, bg=app_menubgnd)
-        self.changeRanksLabel.grid(row=3, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.changeRanksLabel.grid(row=3, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.stratifyLabel = Label(self.frame, text="Stratify Tournament", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.stratifyMenuColor, bg=app_menubgnd)
-        self.stratifyLabel.grid(row=4, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.stratifyLabel.grid(row=4, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.printLabel = Label(self.frame, text="Print Results", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.printMenuColor, bg=app_menubgnd)
-        self.printLabel.grid(row=5, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.printLabel.grid(row=5, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.mpfileLabel = Label(self.frame, text="Write Results File", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.writeFileMenuColor, bg=app_menubgnd)
-        self.mpfileLabel.grid(row=6, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.mpfileLabel.grid(row=6, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.webpageLabel = Label(self.frame, text="Stand-alone Webpage", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.webpageMenuColor, bg=app_menubgnd)
-        self.webpageLabel.grid(row=7, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.webpageLabel.grid(row=7, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.optionsLabel = Label(self.frame, text="Options", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.optionsMenuColor, bg=app_menubgnd)
-        self.optionsLabel.grid(row=8, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.optionsLabel.grid(row=8, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
         self.helpLabel = Label(self.frame, text="Help", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.helpMenuColor, bg=app_menubgnd)
-        self.helpLabel.grid(row=9, column=0, sticky=W, padx=(15, 22), pady=(350, 5))
+        self.helpLabel.grid(row=9, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=(self.uiparts.scale_factor * 350, self.uiparts.scaling["5"]))
         self.aboutLabel = Label(self.frame, text="About", font=("Segoe UI", 10, "underline", "bold"), justify='left', fg=self.helpMenuColor, bg=app_menubgnd)
-        self.aboutLabel.grid(row=10, column=0, sticky=W, padx=(15, 22), pady=5)
+        self.aboutLabel.grid(row=10, column=0, sticky=W, padx=(self.uiparts.scaling["15"], self.uiparts.scaling["20"]), pady=self.uiparts.scaling["5"])
 
         self.homeLabel.bind("<Button-1>", lambda e: root.showPage('home'))
         self.homeLabel.bind("<Enter>", lambda e: {root.highlightLink(e, self.homeLabel, app_menuhilite)})
@@ -342,8 +372,9 @@ class mainContent(baseUIClass):
         Args:
             frame(Frame): tkinter Frame to display the UI in.
     """
-    def __init__(self, frame: Frame):
+    def __init__(self, frame: Frame, uiparts):
         self.frame = frame
+        self.uiparts = uiparts
 
     def getName(self):
         return 'home'
@@ -351,79 +382,79 @@ class mainContent(baseUIClass):
     def construct(self, pagebgnd):
         self.labels = []
         label = Label(self.frame, text="Use Home to return to this page", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=1, column=0, sticky=W, padx=20, pady=(20, 0))
+        label.grid(row=1, column=0, sticky=W, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["20"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Select Tournament to pick an already-scored tournament", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=2, column=0, sticky=W, padx=20, pady=(15, 0))
+        label.grid(row=2, column=0, sticky=W, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="This program ONLY operates with PAIRS tournaments.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=3, column=0, sticky=W, padx=20)
+        label.grid(row=3, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="It operates on a USEBIO file created by your scoring program.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=4, column=0, sticky=W, padx=20)
+        label.grid(row=4, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Change Player Ranks to modify the stratification rank of a pair", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=5, column=0, sticky=SW, padx=20, pady=(15, 0))
+        label.grid(row=5, column=0, sticky=SW, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="This allows you to adjust the rankings of pairs within the stratification.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=6, column=0, sticky=W, padx=20)
+        label.grid(row=6, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Stratify Tournament to stratify a tournament", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=7, column=0, sticky=SW, padx=20, pady=(15, 0))
+        label.grid(row=7, column=0, sticky=SW, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="This creates masterpoint awards for pairs below a certain ranking.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=8, column=0, sticky=W, padx=20)
+        label.grid(row=8, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Print Results to create a PDF of the results", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=9, column=0, sticky=SW, padx=20, pady=(15, 0))
+        label.grid(row=9, column=0, sticky=SW, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="You can pin this on your club notice board or use it to see the stratification.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=10, column=0, sticky=SW, padx=20)
+        label.grid(row=10, column=0, sticky=SW, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Write Results File to create a new USEBIO file", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=11, column=0, sticky=SW, padx=20, pady=(15, 0))
+        label.grid(row=11, column=0, sticky=SW, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="This contains the stratified results in an uploadable format.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=12, column=0, sticky=SW, padx=20)
+        label.grid(row=12, column=0, sticky=SW, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Stand-alone Webpage to create a results webpage", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=13, column=0, sticky=W, padx=20, pady=(15, 0))
+        label.grid(row=13, column=0, sticky=W, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="This is useful if you do not upload to Bridgewebs or similar and have your own website.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=14, column=0, sticky=W, padx=20)
+        label.grid(row=14, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Options to configure the program", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=15, column=0, sticky=W, padx=20, pady=(15, 0))
+        label.grid(row=15, column=0, sticky=W, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="You can set the default directories and stratification levels here.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=16, column=0, sticky=W, padx=20)
+        label.grid(row=16, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
 
         label = Label(self.frame, text="Use Help to access the program help", font=("Segoe UI", 11, "bold"), justify='left', bg=pagebgnd)
-        label.grid(row=17, column=0, sticky=W, padx=20, pady=(15, 0))
+        label.grid(row=17, column=0, sticky=W, padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["15"], 0))
         self.labels.append(label)
 
         label = Label(self.frame, text="We recommend you read the Home page of the help BEFORE starting.", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=18, column=0, sticky=W, padx=20)
+        label.grid(row=18, column=0, sticky=W, padx=self.uiparts.scaling["20"])
         self.labels.append(label)
         
         label = Label(self.frame, text="", font=("Segoe UI", 10), justify='left', bg=pagebgnd)
-        label.grid(row=19, column=0, sticky=NW, padx=420, pady=200)
+        label.grid(row=19, column=0, sticky=NW, padx=self.uiparts.scale_factor *420, pady=self.uiparts.scaling["200"])
         self.labels.append(label)
         
     def clearContent(self):

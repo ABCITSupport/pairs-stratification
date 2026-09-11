@@ -22,5 +22,7 @@ class UIParts:
         self.webpageDisplay = None
         self.options = None
         self.about = None
+        self.scale_factor = None
+        self.scaling = {}
         pass
 
