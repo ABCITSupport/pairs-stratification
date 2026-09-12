@@ -394,10 +394,12 @@ function buildDDRow(directionName, ddRowData, className) {
 /*************************************************************************/
 // Function to build a deal table
 function buildDeal(boardNum) {
-	// Find the deal data for the given board number
-	boardData = deals[boardNum];
-	deal = boardData.deal;
-	tricks = boardData.tricks;
+	if (typeof deals !== "undefined") {
+		// Find the deal data for the given board number
+		boardData = deals[boardNum];
+		deal = boardData.deal;
+		tricks = boardData.tricks;
+	}
 
 	// Create table
 	const table = document.createElement('table');
@@ -414,98 +416,100 @@ function buildDeal(boardNum) {
 		thead.appendChild(headerRow);
 		table.appendChild(thead);
 	}
-	// The table body is 3x4 cells
-	const tbody = document.createElement('tbody');
-	// Top row has board info, then North, then a blank cell
-	{
-		const row = document.createElement('tr');
+	if (typeof deals !== "undefined") {
+		// The table body is 3x4 cells
+		const tbody = document.createElement('tbody');
+		// Top row has board info, then North, then a blank cell
 		{
-			const td = document.createElement('td');
-			td.innerHTML = 'Dealer: ' + boardData.dealer + '<br>Vul: ' + boardData.vulnerability;
-			td.className = 'dealinfo';
-			row.appendChild(td);
+			const row = document.createElement('tr');
+			{
+				const td = document.createElement('td');
+				td.innerHTML = 'Dealer: ' + boardData.dealer + '<br>Vul: ' + boardData.vulnerability;
+				td.className = 'dealinfo';
+				row.appendChild(td);
+			}
+			{
+				const td = document.createElement('td');
+				row.appendChild(td);
+			}
+			row.append(buildHand(deal[0], 'northhand'));
+			{
+				const td = document.createElement('td');
+				row.appendChild(td);
+			}
+			tbody.appendChild(row);
 		}
+		// Middle row has West, then board, then East
 		{
-			const td = document.createElement('td');
-			row.appendChild(td);
+			const row = document.createElement('tr');
+			row.append(buildHand(deal[3], 'westhand'));
+			{
+				const td = document.createElement('td');
+				td.innerHTML = 'N<br><br>W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E<br><br>S';
+				td.className = 'dealcenter';
+				td.setAttribute('colspan', '2');
+				row.appendChild(td);
+			}
+			row.append(buildHand(deal[1], 'easthand'));
+			tbody.appendChild(row);
 		}
-		row.append(buildHand(deal[0], 'northhand'));
+		// Bottom row has double-dummy contracts, then South, then blank
 		{
-			const td = document.createElement('td');
-			row.appendChild(td);
+			const row = document.createElement('tr');
+			{
+				// The double-dummy contracts is a nested table
+				const ddtable = document.createElement('table');
+				ddtable.className = 'ddtable'
+				const thead = document.createElement('thead');
+				const headerRow = document.createElement('tr');
+				{
+					const th = document.createElement('th');
+					headerRow.appendChild(th);
+				}
+				{
+					const th = document.createElement('th');
+					th.textContent = 'N';
+					headerRow.appendChild(th);
+				}
+				{
+					const th = document.createElement('th');
+					th.textContent = 'S';
+					headerRow.appendChild(th);
+				}
+				{
+					const th = document.createElement('th');
+					th.textContent = 'H';
+					headerRow.appendChild(th);
+				}
+				{
+					const th = document.createElement('th');
+					th.textContent = 'D';
+					headerRow.appendChild(th);
+				}
+				{
+					const th = document.createElement('th');
+					th.textContent = 'C';
+					headerRow.appendChild(th);
+				}
+				thead.appendChild(headerRow);
+				ddtable.appendChild(thead);
+				const ddtbody = document.createElement('tbody');
+				ddtbody.appendChild(buildDDRow('N', tricks[0], 'ddrow'));
+				ddtbody.appendChild(buildDDRow('S', tricks[1], 'ddrow'));
+				ddtbody.appendChild(buildDDRow('E', tricks[2], 'ddrow'));
+				ddtbody.appendChild(buildDDRow('W', tricks[3], 'ddrow'));
+				ddtable.appendChild(ddtbody);
+				row.appendChild(ddtable);
+			}
+			{
+				const td = document.createElement('td');
+				row.appendChild(td);
+			}
+			row.append(buildHand(deal[2], 'southhand'));
+			tbody.appendChild(row);
 		}
-		tbody.appendChild(row);
+		table.appendChild(tbody);
 	}
-	// Middle row has West, then board, then East
-	{
-		const row = document.createElement('tr');
-		row.append(buildHand(deal[3], 'westhand'));
-		{
-			const td = document.createElement('td');
-			td.innerHTML = 'N<br><br>W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E<br><br>S';
-			td.className = 'dealcenter';
-			td.setAttribute('colspan', '2');
-			row.appendChild(td);
-		}
-		row.append(buildHand(deal[1], 'easthand'));
-		tbody.appendChild(row);
-	}
-	// Bottom row has double-dummy contracts, then South, then blank
-	{
-		const row = document.createElement('tr');
-		{
-			// The double-dummy contracts is a nested table
-			const ddtable = document.createElement('table');
-			ddtable.className = 'ddtable'
-			const thead = document.createElement('thead');
-			const headerRow = document.createElement('tr');
-			{
-				const th = document.createElement('th');
-				headerRow.appendChild(th);
-			}
-			{
-				const th = document.createElement('th');
-				th.textContent = 'N';
-				headerRow.appendChild(th);
-			}
-			{
-				const th = document.createElement('th');
-				th.textContent = 'S';
-				headerRow.appendChild(th);
-			}
-			{
-				const th = document.createElement('th');
-				th.textContent = 'H';
-				headerRow.appendChild(th);
-			}
-			{
-				const th = document.createElement('th');
-				th.textContent = 'D';
-				headerRow.appendChild(th);
-			}
-			{
-				const th = document.createElement('th');
-				th.textContent = 'C';
-				headerRow.appendChild(th);
-			}
-			thead.appendChild(headerRow);
-			ddtable.appendChild(thead);
-			const ddtbody = document.createElement('tbody');
-			ddtbody.appendChild(buildDDRow('N', tricks[0], 'ddrow'));
-			ddtbody.appendChild(buildDDRow('S', tricks[1], 'ddrow'));
-			ddtbody.appendChild(buildDDRow('E', tricks[2], 'ddrow'));
-			ddtbody.appendChild(buildDDRow('W', tricks[3], 'ddrow'));
-			ddtable.appendChild(ddtbody);
-			row.appendChild(ddtable);
-		}
-		{
-			const td = document.createElement('td');
-			row.appendChild(td);
-		}
-		row.append(buildHand(deal[2], 'southhand'));
-		tbody.appendChild(row);
-	}
-	table.appendChild(tbody);
 	return table;
 }
 
