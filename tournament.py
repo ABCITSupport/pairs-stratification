@@ -130,10 +130,7 @@ class pairData:
             self.isNS = isNS
             if isNS:
                 self.versus = newTravellerLine.EWPair
-                if eventType != 0:
-                    self.pts = newTravellerLine.score
-                else:
-                    self.pts = newTravellerLine.NSScore
+                self.pts = newTravellerLine.score if eventType == 2 else newTravellerLine.NSScore
             else:
                 self.versus = newTravellerLine.NSPair
                 self.pts = newTravellerLine.score if eventType == 2 else newTravellerLine.EWScore

@@ -334,7 +334,7 @@ class webpage(baseUIClass):
                             "plus": line.score,
                             "minus": '',
                         }
-                        if self.tournamentData.eventType == 0:
+                        if self.tournamentData.eventType != 2:
                             linedata["nsmps"] = line.NSScore,
                             linedata["ewmps"] = line.EWScore
                         if isinstance(line.score, int):
