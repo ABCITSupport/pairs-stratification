@@ -524,7 +524,12 @@ function buildTraveller(boardNum, pairnum) {
 	{
 		const thead = document.createElement('thead');
 		const headerRow = document.createElement('tr');
-		headerRow.innerHTML = '<th>NS</th><th>EW</th><th>Ctrt</th><th>By</th><th>Lead</th><th>Tks</th><th>+</th><th>-</th><th colspan="2">Score</th>';
+		if (eventInfo.scoremethod != 2) {
+			headerRow.innerHTML = '<th>NS</th><th>EW</th><th>Ctrt</th><th>By</th><th>Lead</th><th>Tks</th><th>+</th><th>-</th><th colspan="2">Score</th>';
+		}
+		else {
+			headerRow.innerHTML = '<th>NS</th><th>EW</th><th>Ctrt</th><th>By</th><th>Lead</th><th>Tks</th><th>+</th><th>-</th>';
+		}
 		thead.appendChild(headerRow);
 		table.appendChild(thead);
 	}
@@ -549,6 +554,12 @@ function buildTraveller(boardNum, pairnum) {
 				td.textContent = lineitem;
 				row.appendChild(td);
 			});
+		}
+		else if (eventInfo.scoremethod == 1) {
+			const td = document.createElement('td');
+			td.textContent = travellerLine.nsmps;
+			td.setAttribute('colspan', '2');
+			row.appendChild(td);
 		}
 		// Stripe the table on even rows using a class on the row element
 		rowNum++;
