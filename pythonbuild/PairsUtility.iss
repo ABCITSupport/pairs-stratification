@@ -4,7 +4,7 @@
 AppName=Pairs Stratification
 AppVersion=1.07.02
 AppPublisher="Steve Pomeroy"
-DefaultDirName={sd}\PairsStrat
+DefaultDirName={localappdata}\PairsStrat
 DefaultGroupName=PairsStratification
 OutputBaseFilename=PairsStrat-Setup
 Compression=lzma
