@@ -171,7 +171,7 @@ class options(baseUIClass):
         label.grid(row=6, column=0, sticky="ew", padx=self.uiparts.scaling["100"])
         self.labels.append(label)
 
-        label = tb.Label(self.scrollable_frame, text="Select the default printf file output directory.", font=("Segoe UI", 11, "bold"), justify='left')
+        label = tb.Label(self.scrollable_frame, text="Select the default print file output directory.", font=("Segoe UI", 11, "bold"), justify='left')
         label.grid(row=7, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["10"], 0))
         self.labels.append(label)
         label = tb.Label(self.scrollable_frame, text="Stratified USEBIO XML files are written here.", font=("Segoe UI", 10), justify='left')

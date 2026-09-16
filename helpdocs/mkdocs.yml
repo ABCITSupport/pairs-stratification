@@ -5,8 +5,8 @@ nav:
   - Stratification: stratification.md
   - User Interface: userif.md
   - Installation: installation.md
+  - Configuring for Scorebridge: config4SB.md
   - Troubleshooting: troubleshooting.md
-  - Batch Mode: batch.md
   - FAQs: faqs.md
 theme: material
 extra_css:

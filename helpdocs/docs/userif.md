@@ -294,9 +294,15 @@ The Options function allows you set up some default information specific to your
 
 Selecting the default USEBIO input results directory allows the Select Tournament function to look in that directory when you click Browse to select a tournament.
 
-Selecting the default output directory allows you to specify a directory that the outputs of the program will be written to. These can be overridden when using the Browse button to select and output file but, by default, 3 directories are created underneath this output directory named MPFiles (USEBIO output files), PDFs (print files) and WebPages (guess!). A cache directory is also created here to hold the cached copy of the player's database obtained from MEMPAD.
+Selecting the default output directory allows you to specify a directory that the stratified USEBIO files of the program will be written to.
 
-Selecting the default hand records directory allows you to specify where your hand records (.PBN files) are normally held.
+Selecting the default print file directory allows you to specify a directory that printed results will be written to, in PDF format.
+
+Selecting the default web pages file directory allows you to specify a directory that webpages will be written to. These files can be uploaded to your club website.
+
+Selecting the default hand records directory allows you to specify where your hand records (.PBN files) are normally held. These are combined into the stand-alone webpage to provide had records along with the travellers in the webpage.
+
+Selecting the webpage template allows you to select the template file that is used to generate the stand-alone web page.
 
 The above options are "convenience" options intended to reduce the amount of browsing on your file system by starting at the same directory each time.
 
