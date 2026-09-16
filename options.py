@@ -136,6 +136,11 @@ class options(baseUIClass):
 
         self.labels = []
 
+        self.saveButton = tb.Button(self.frame, text="Save", bootstyle="primary", width=10, state="disabled", command=self.SavePressed)
+        self.resetButton = tb.Button(self.frame, text="Reset", bootstyle="primary", width=10, state="disabled", command=self.ResetPressed)
+        self.labels.append(self.saveButton)
+        self.labels.append(self.resetButton)
+
         label = tb.Label(self.scrollable_frame, text="Select the default input USEBIO results directory.", font=("Segoe UI", 11, "bold"), justify='left')
         label.grid(row=1, column=0, columnspan=2, sticky="w", padx=self.uiparts.scaling["20"], pady=(self.uiparts.scaling["20"], 0))
         self.labels.append(label)
@@ -268,11 +273,6 @@ class options(baseUIClass):
         self.completeLabel = tb.Label(self.frame, text="", foreground=msg_completeColor, font=("Segoe UI", 10, "bold"), justify='left')
         self.completeLabel.place(x=self.uiparts.scale_factor * 300, y=self.uiparts.scale_factor * 670)
 
-        self.saveButton = tb.Button(self.frame, text="Save", bootstyle="primary", width=10, state="disabled", command=self.SavePressed)
-        self.resetButton = tb.Button(self.frame, text="Reset", bootstyle="primary", width=10, state="disabled", command=self.ResetPressed)
-        self.labels.append(self.saveButton)
-        self.labels.append(self.resetButton)
-
         self.saveButton.place(x=self.uiparts.scale_factor * 630, y=self.uiparts.scale_factor * 650)
         self.resetButton.place(x=self.uiparts.scale_factor * 730, y=self.uiparts.scale_factor * 650)
 
@@ -296,6 +296,19 @@ class options(baseUIClass):
                     pass
             self.traces.clear()
 
+        # Unbind combobox virtual events
+        if hasattr(self, 'cb1') and self.cb1:
+            try:
+                self.cb1.unbind("<<ComboboxSelected>>")
+            except Exception:
+                pass
+
+        if hasattr(self, 'cb2') and self.cb2:
+            try:
+                self.cb2.unbind("<<ComboboxSelected>>")
+            except Exception:
+                pass
+
         # Destroy the scrollable frame contents
         for widget in self.scrollable_frame.winfo_children():
             widget.destroy()
@@ -309,19 +322,6 @@ class options(baseUIClass):
             self.frame.grid_columnconfigure(i, weight=0)
         for i in range(rows):
             self.frame.grid_rowconfigure(i, weight=0)
-
-        # Unbind combobox virtual events
-        if hasattr(self, 'cb1') and self.cb1:
-            try:
-                self.cb1.unbind("<<ComboboxSelected>>")
-            except Exception:
-                pass
-
-        if hasattr(self, 'cb2') and self.cb2:
-            try:
-                self.cb2.unbind("<<ComboboxSelected>>")
-            except Exception:
-                pass
 
         # Break button command references
         if hasattr(self, 'saveButton') and self.saveButton:
