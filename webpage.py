@@ -54,7 +54,7 @@ class webpage(baseUIClass):
             self.numLoads = self.tournamentData.numLoads
             outputFilename = self.tournamentData.getOutputFilename()
             if len(outputFilename) > 0:
-                self.outputFileVar.set(self.uiparts.options.getDirectory('outputsdir') + self.uiparts.options.getDirectory('webpagesdir') + self.tournamentData.getOutputFilename() + ".html")
+                self.outputFileVar.set(self.uiparts.options.getDirectory('webpagesdir') + self.tournamentData.getOutputFilename() + ".html")
             else:
                 self.outputFileVar.set("")
 
@@ -171,7 +171,7 @@ class webpage(baseUIClass):
         self.setInputFile(None)
 
     def pickOutputFile(self):
-        filename = filehandling.openWebpageFile(self.uiparts.options.getDirectory("outputsdir") + self.uiparts.options.config["webpagesdir"])
+        filename = filehandling.openWebpageFile(self.uiparts.options.getDirectory("webpagesdir"))
         if len(filename) > 0:
             self.outputFileVar.set(filename)
 
@@ -217,7 +217,7 @@ class webpage(baseUIClass):
             self.create()
         
     def create(self):
-        self.uiparts.options.getDirectory("outputsdir")
+        self.uiparts.options.createOutputDirs()
         def createRanking(results, stratumNumber):
             data = []
             for result in results:

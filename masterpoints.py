@@ -48,7 +48,7 @@ class masterpoints(baseUIClass):
             self.numLoads = self.tournamentData.numLoads
             outputFilename = self.tournamentData.getOutputFilename()
             if len(outputFilename) > 0:
-                self.outputFileVar.set(self.uiparts.options.getDirectory('outputsdir') + self.uiparts.options.getDirectory('masterpointsdir') + self.tournamentData.getOutputFilename() + ".xml")
+                self.outputFileVar.set(self.uiparts.options.getDirectory('masterpointsdir') + self.tournamentData.getOutputFilename() + ".xml")
             else:
                 self.outputFileVar.set("")
 
@@ -107,7 +107,7 @@ class masterpoints(baseUIClass):
         self.nextButton = None
 
     def pickInputFile(self):
-        filename = filehandling.openResultsFile(self.uiparts.options.getDirectory("outputsdir") + self.uiparts.options.config["masterpointsdir"], True)
+        filename = filehandling.openResultsFile(self.uiparts.options.getDirectory("masterpointsdir"), True)
         if len(filename) > 0:
             self.outputFileVar.set(filename)
 

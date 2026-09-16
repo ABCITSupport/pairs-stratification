@@ -488,10 +488,8 @@ parser.add_argument('--strat2', type=str, required=False,
                     help='Masterpoints rank name for stratum 2')
 args = parser.parse_args()
 
-# Create an options instance so we can load the MEMPAD data
-optionsInstance = options.options(None, baseDir, None)
 # Get the current mamber ranking from MEMPAD / cache
-memberDict = readPlayersDB(True, optionsInstance)
+memberDict = readPlayersDB(True)
 
 def has_console():
     # If running inside VS Code, treat as NOT console

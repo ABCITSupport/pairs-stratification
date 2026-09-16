@@ -50,7 +50,7 @@ class pdfresults(baseUIClass):
             self.numLoads = self.tournamentData.numLoads
             outputFilename = self.tournamentData.getOutputFilename()
             if len(outputFilename) > 0:
-                self.outputFileVar.set(self.uiparts.options.getDirectory('outputsdir') + self.uiparts.options.getDirectory('pdfsdir') + self.tournamentData.getOutputFilename() + ".pdf")
+                self.outputFileVar.set(self.uiparts.options.getDirectory('pdfsdir') + self.tournamentData.getOutputFilename() + ".pdf")
             else:
                 self.outputFileVar.set("")
 
@@ -136,7 +136,7 @@ class pdfresults(baseUIClass):
         self.completeLabel = None
 
     def pickInputFile(self):
-        filename = filehandling.openPDFFile(self.uiparts.options.getDirectory("outputsdir") + self.uiparts.options.config["pdfsdir"])
+        filename = filehandling.openPDFFile(self.uiparts.options.getDirectory("pdfsdir"))
         if len(filename) > 0:
             self.outputFileVar.set(filename)
 
@@ -161,7 +161,7 @@ class pdfresults(baseUIClass):
             pdfFilename = outputFilename
         else:
             # Make sure the output dirs are created
-            self.uiparts.options.getDirectory("outputsdir")
+            self.uiparts.options.createOutputDirs()
             pdfFilename = self.outputFileVar.get()
 
         if len(pdfFilename) > 0:

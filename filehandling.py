@@ -11,8 +11,10 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 import csv
 import io
+import sys
 import os
 import applogger
+from pathlib import Path
 
 def openResultsFile(startingDir: str, forWriting: bool):
     """ Displays a file chooser dialog for input and output USEBIO results files.
@@ -50,7 +52,23 @@ def findOutputsFileDirectory():
         Returns:
             str: Full pathname of picked directory or None.
     """
-    return(fd.askdirectory(title='Locate outputs directory', initialdir='/', mustexist=True))
+    return(fd.askdirectory(title='Locate USEBIO XML files output directory', initialdir='/', mustexist=True))
+
+def findPDFsFileDirectory():
+    """ Displays a directory chooser dialog for output PDF print files.
+    
+        Returns:
+            str: Full pathname of picked directory or None.
+    """
+    return(fd.askdirectory(title='Locate print files (PDFs) output directory', initialdir='/', mustexist=True))
+
+def findWebpagesFileDirectory():
+    """ Displays a directory chooser dialog for output web page files.
+    
+        Returns:
+            str: Full pathname of picked directory or None.
+    """
+    return(fd.askdirectory(title='Locate web pages output directory', initialdir='/', mustexist=True))
 
 def findHandRecordsFileDirectory():
     """ Displays a directory chooser dialog for input hand records (PBN) files.
@@ -128,7 +146,7 @@ def openWebpageFile(startingDir):
         startingDir = '/'
     return(fd.asksaveasfilename(title='Locate webpage output file', initialdir=startingDir, filetypes=filetypes, defaultextension='.html'))
 
-def readPlayersDB(writeCacheFile: bool, optionsInstance) -> dict:
+def readPlayersDB(writeCacheFile: bool) -> dict:
     """ Reads the players CSV DB from MEMPAD, failing which the local cache file.
 
         Args:
@@ -156,8 +174,17 @@ def readPlayersDB(writeCacheFile: bool, optionsInstance) -> dict:
         return session
 
     # Get the name of the cache file for the players DB from mempad
+    if getattr(sys, 'frozen', False):
+        # Running as a compiled executable (.exe)
+        exe_path = Path(sys.executable).parent
+    else:
+        # Running as a normal Python script (.py)
+        exe_path = Path(__file__).resolve().parent
+
+    print(f"Executable directory: {exe_path}")
+
     if writeCacheFile:
-        cachedir = optionsInstance.getDirectory('outputsdir') + 'cache/'
+        cachedir = f"{exe_path}/cache/"
         cachefile = cachedir + 'MPData.csv'
 
     # Read the players DB so we can look up player ranks
