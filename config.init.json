@@ -1,11 +1,10 @@
 {
-    "resultsdir": ".",
-    "outputsdir": ".",
-    "handrecordsdir": ".",
+    "resultsdir": "C:/BridgeData/YourClub/MasterPointFiles/SBU MP Files",
+    "masterpointsdir": "C:/BridgeData/YourClub/MasterPointFiles",
+    "pdfsdir": "C:/BridgeData/YourClub/PDFs",
+    "webpagesdir": "C:/BridgeData/YourClub/WebPages",
+    "handrecordsdir": "C:/BridgeData/YourClub/DealFiles",
     "webfiletemplate": "./SingleFileTmpl.html",
     "stratum1threshold": "Regional Master",
-    "stratum2threshold": "None",
-    "webpagesdir": "WebPages",
-    "masterpointsdir": "MPFiles",
-    "pdfsdir": "PDFs"
+    "stratum2threshold": "None"
 }

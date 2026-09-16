@@ -14,6 +14,6 @@ Uninstalling does not remove any of your data files, including outputs generated
 
 ## Retaining your Options
 
-To keep your Options, copy the file "config.json" somewhere safe BEFORE uninstalling and reinstalling. This file is located in the installation folder (default C:\PairsStrat).
+To keep your Options, copy the file "config.json" somewhere safe BEFORE uninstalling and reinstalling. This file is located in the installation folder (default C:\Users\{your username}\AppData\Local\PairsUtility).
 
 Upgrading to a newer version without uninstalling first will keep your options settings.
