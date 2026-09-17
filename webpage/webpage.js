@@ -259,7 +259,10 @@ function buildScorecardTable(pairnum) {
 			pairname = getPairName(item.versus);
 			{
 				const td = document.createElement('td');
-				td.appendChild(createLink((pairname != null) ? pairname : '', item.boardNum, pairnum));
+				const innerdiv = document.createElement('div')
+				innerdiv.className = 'player-names';
+				innerdiv.appendChild(createLink((pairname != null) ? pairname : '', item.boardNum, pairnum));
+				td.append(innerdiv);
 				td.rowSpan = boardsperround;
 				td.className = 'item';
 				row.appendChild(td);

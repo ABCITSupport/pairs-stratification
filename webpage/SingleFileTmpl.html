@@ -42,6 +42,7 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 		table.ddtable { font-size: 0.8em; border: 0; border-collapse: collapse; width: 110px; margin-left: 10px; margin-right: 20px; }
 		table.ddtable th { background: transparent; color: black; padding: 16px 8px 0 0; }
 		table.ddtable td { padding: 0 8px 0 0; }
+		.player-names { display: grid; justify-content: center; text-align: left; }
 		.btnspace { padding-top: 10px; }
 		.nav-btn {
 			background-color: #e2e8f0;
@@ -93,6 +94,7 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
         tr.even { background: #e4eaff }
 		tr.hilite { background:#f4e820 }
         td { padding: 4px }
+		.stablediv td { padding: 2px 2px }
 		td.colorlolo { border: 1px solid #ddd; margin-bottom: 5px; text-align: center; background: #f86060; color: white; }
 		td.colorlo { border: 1px solid #ddd; margin-bottom: 5px; text-align: center; background: #fa941f; color: white; }
 		td.colormed { border: 1px solid #ddd; margin-bottom: 5px; text-align: center; background: #ffff20; color: black; }
@@ -381,7 +383,10 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 				pairname = getPairName(item.versus);
 				{
 					const td = document.createElement('td');
-					td.appendChild(createLink((pairname != null) ? pairname : '', item.boardNum, pairnum));
+					const innerdiv = document.createElement('div')
+					innerdiv.className = 'player-names';
+					innerdiv.appendChild(createLink((pairname != null) ? pairname : '', item.boardNum, pairnum));
+					td.append(innerdiv);
 					td.rowSpan = boardsperround;
 					td.className = 'item';
 					row.appendChild(td);
