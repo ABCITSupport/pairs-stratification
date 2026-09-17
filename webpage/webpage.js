@@ -217,6 +217,9 @@ function buildScorecardTable(pairnum) {
 		if (linkText == '') {
 			link.className = 'blanklink';
 		}
+		else {
+			link.className = 'table-cell-link';
+		}
 		link.addEventListener('click', function(event) {
 			event.preventDefault();
 			boardClick(boardNum, pairnum);
@@ -228,6 +231,7 @@ function buildScorecardTable(pairnum) {
 		const row = document.createElement('tr');
 		const link = document.createElement('a');
 		link.href = '#';
+		link.className = 'table-cell-link';
 		link.addEventListener('click', function(event) {
 			event.preventDefault();
 			boardClick(item.boardNum, pairnum);
@@ -644,11 +648,12 @@ function nameClick(pairnum) {
 
 	// Create back link
 	const backdiv = document.createElement('div');
-	backdiv.className = "backlink";
-	const backlink = document.createElement('a');
+	backdiv.className = "btnwrapper";
+	const backlink = document.createElement('button');
+	backlink.className = "nav-btn";
 	backlink.href = '#';
 	backlink.onclick = function(event) { event.preventDefault(); renderContent() };
-	backlink.text = '<-Back';
+	backlink.innerHTML = '&laquo; Back';
 	backdiv.appendChild(backlink);
 	container.appendChild(backdiv);
 
@@ -666,11 +671,12 @@ function nameClick(pairnum) {
 
 	// Create second back link
 	const backdiv2 = document.createElement('div');
-	backdiv2.className = "backlink";
-	const backlink2 = document.createElement('a');
+	backdiv2.className = "btnwrapper";
+	const backlink2 = document.createElement('button');
+	backlink2.className = "nav-btn";
 	backlink2.href = '#';
 	backlink2.onclick = function(event) { event.preventDefault(); renderContent() };
-	backlink2.text = '<-Back';
+	backlink2.innerHTML = '&laquo; Back';
 	backdiv2.appendChild(backlink2);
 	container.appendChild(backdiv2);
 }
@@ -685,34 +691,29 @@ function boardClick(boardNum, pairnum) {
 	boarddiv.className = "oneboarddiv";
 	boarddiv.appendChild(buildDeal(boardNum));
 
-	const travdiv = document.createElement('div');
-	travdiv.className = "onetravdiv";
-	travdiv.appendChild(buildTraveller(boardNum, pairnum));
+	boarddiv.appendChild(buildTraveller(boardNum, pairnum));
 	container.appendChild(boarddiv);
-	container.appendChild(travdiv);
 
 	const btnspacediv = document.createElement('div');
 	btnspacediv.className = "btnwrapper";
 
-	if (boardNum < eventInfo.numboards) {
-		const fwdbddiv = document.createElement('div');
-		fwdbddiv.className = "bdlinkfwd";
-		const fwdlink = document.createElement('a');
-		fwdlink.href = '#';
-		fwdlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum + 1, pairnum) };
-		fwdlink.text = 'Next->   ';
-		fwdbddiv.appendChild(fwdlink);
-		btnspacediv.appendChild(fwdbddiv);
+	const backlink = document.createElement('button');
+	backlink.className = "nav-btn";
+	backlink.href = '#';
+	backlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum - 1, pairnum) };
+	backlink.innerHTML = '&laquo; Prev';
+	btnspacediv.appendChild(backlink);
+	if (boardNum <= 1) {
+		backlink.style.visibility = 'hidden';
 	}
-	if (boardNum > 1) {
-		const backbddiv = document.createElement('div');
-		backbddiv.className = "bdlinkbck";
-		const backlink = document.createElement('a');
-		backlink.href = '#';
-		backlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum - 1, pairnum) };
-		backlink.text = '   <-Prev';
-		backbddiv.appendChild(backlink);
-		btnspacediv.appendChild(backbddiv);
+	const fwdlink = document.createElement('button');
+	fwdlink.className = "nav-btn";
+	fwdlink.href = '#';
+	fwdlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum + 1, pairnum) };
+	fwdlink.innerHTML = 'Next &raquo;';
+	btnspacediv.appendChild(fwdlink);
+	if (boardNum >= eventInfo.numboards) {
+		fwdlink.style.visibility = 'hidden';
 	}
 	container.appendChild(btnspacediv);
 }

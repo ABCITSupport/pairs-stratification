@@ -17,13 +17,14 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 		#contenthead { text-align: center; padding-top: 10px; }
         .item { border: 1px solid #ddd; margin-bottom: 5px; }
         .itemc { border: 1px solid #ddd; margin-bottom: 5px; text-align: center; }
+		.table-cell-link { padding: 10px 8px; }
 		div.stablediv { margin: 0 10px 10px 0; min-width: 610px; }
-		div.boarddiv { margin-bottom: 10px; width: 360px; }
+		div.boarddiv { margin-bottom: 10px; max-width: 600px; display: inline-block; }
 		div.backlink { clear: both; }
 		div.scorewrapperdiv { margin: 10px 0 10px 0; }
-		div.btnwrapper { margin-top: 10px; }
+		div.btnwrapper { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 12px; }
         th { background: #647498; color: white; padding: 0px 4px 0px 4px; border: none }
-		table.dealtable { font-size: 1.1em; border-collapse: collapse; width: 360px }
+		table.dealtable { font-size: 1.1em; border-collapse: collapse; width: 100% }
 		table.dealtable th { background: #647498; color: white; padding: 0px 4px 0px 4px; border: none }
 		table.dealtable td { padding: 4px; }
 		table.dealtable td.dealcenter { padding: 4px; text-align: center; }
@@ -34,17 +35,57 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 		table.scorecardtable { border-collapse: collapse; max-width: 620px; }
         table.scorecardtable th { padding: 4px 4px 4px 4px; }
 		table.scorecardtable a { color: black; cursor: pointer; text-decoration: unset; }
-		table.travellertable { font-size: 1em; border: 1px solid #ddd; border-collapse: collapse; width: 360px; text-align: center }
-		table.travellertable td { border: 1px solid #ddd; margin-bottom: 5px; padding: 0; }
+		table.travellertable { font-size: 1em; border: 1px solid #ddd; border-collapse: collapse; text-align: center }
+		table.travellertable td { border: 1px solid #ddd; margin-bottom: 5px; padding: 3px 10px; }
 		table.travellertable td.scorecell { min-width: 25px; }
 		table.dealtable td.dealinfo { font-size: 0.9em; vertical-align: top; }
 		table.ddtable { font-size: 0.8em; border: 0; border-collapse: collapse; width: 60%; margin-left: 10px; }
 		table.ddtable th { background: transparent; color: black; padding: 16px 8px 0 0; }
 		table.ddtable td { padding: 0 8px 0 0; }
 		.btnspace { padding-top: 10px; }
-		.bdlinkfwd { display: inline-block; padding: 10px; background-color: #a0a0a0; border-radius: 6px; transition: background-color 0.2s ease; }
-		.bdlinkbck { float: right; padding: 10px; background-color: #a0a0a0; border-radius: 6px; transition: background-color 0.2s ease; }
-		.bdlinkfwd a, .bdlinkbck a, .backlink a { font-size: 1.8em;  color: #fff; text-decoration: none; font-weight: 600; }
+		.nav-btn {
+			background-color: #e2e8f0;
+			color: #1e293b;
+			border: 1px solid #cbd5e1;
+			border-radius: 6px;
+			padding: 6px 14px;
+			font-size: 13px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.2s ease;
+		}
+		.nav-btn:hover {
+		background-color: #cbd5e1;
+		}
+		/* Mobile Styles: Screens under 600px (Large & Tap-Friendly) */
+		@media (max-width: 600px) {
+			.nav-btn {
+				flex: 1;                /* Expand evenly across full width */
+				padding: 14px 0;        /* Large vertical padding for fat fingers */
+				font-size: 16px;        /* Larger legible text */
+				background-color: #e2e8f0; /* Darker accent for higher contrast */
+				color: #1e293b;
+				border: none;
+				border-radius: 8px;
+			}
+			/* Increase padding to prevent fat-finger misclicks */
+			.responsive-table td {
+				padding: 10px 8px; 
+				font-size: 14px;
+			}
+			.table-cell-link {
+				display: block;
+				padding: 4px 2px;
+				font-size: 18px;
+				box-sizing: border-box;
+			}
+			table.scorecardtable {
+				max-width: unset !important;
+			}
+			.table.scorecardtable th {
+				font-size: 18px;
+			}
+		}
 		.backlink { display: inline-block; padding: 10px; background-color: #a0a0a0; border-radius: 6px; transition: background-color 0.2s ease; }
 		.backlink:hover, .bdlinkfwd:hover, .bdlinkbck:hover { background-color: #647498; }
         tr.even { background: #e4eaff }
@@ -73,9 +114,6 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 		/* Responsive styling (mobile) */
 		body.mobile {
 		  font-size: 1.2em;
-		  div.boarddiv { transform: scale(1.4, 1); transform-origin: top left; }
-		  div.bdlinkfwd, div.bdlinkbck  { transform: scale(0.7, 1); transform-origin: left}
-		  div.btnwrapper { width: 403px}
 		  width: 600px;
 		}
     </style>
@@ -299,6 +337,9 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 			if (linkText == '') {
 				link.className = 'blanklink';
 			}
+			else {
+				link.className = 'table-cell-link';
+			}
 			link.addEventListener('click', function(event) {
 				event.preventDefault();
 				boardClick(boardNum, pairnum);
@@ -310,6 +351,7 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 			const row = document.createElement('tr');
 			const link = document.createElement('a');
 			link.href = '#';
+			link.className = 'table-cell-link';
 			link.addEventListener('click', function(event) {
 				event.preventDefault();
 				boardClick(item.boardNum, pairnum);
@@ -728,11 +770,12 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 
 		// Create back link
 		const backdiv = document.createElement('div');
-		backdiv.className = "backlink";
-		const backlink = document.createElement('a');
+		backdiv.className = "btnwrapper";
+		const backlink = document.createElement('button');
+		backlink.className = "nav-btn";
 		backlink.href = '#';
 		backlink.onclick = function(event) { event.preventDefault(); renderContent() };
-		backlink.text = '<-Back';
+		backlink.innerHTML = '&laquo; Back';
 		backdiv.appendChild(backlink);
 		container.appendChild(backdiv);
 
@@ -750,11 +793,12 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 
 		// Create second back link
 		const backdiv2 = document.createElement('div');
-		backdiv2.className = "backlink";
-		const backlink2 = document.createElement('a');
+		backdiv2.className = "btnwrapper";
+		const backlink2 = document.createElement('button');
+		backlink2.className = "nav-btn";
 		backlink2.href = '#';
 		backlink2.onclick = function(event) { event.preventDefault(); renderContent() };
-		backlink2.text = '<-Back';
+		backlink2.innerHTML = '&laquo; Back';
 		backdiv2.appendChild(backlink2);
 		container.appendChild(backdiv2);
 	}
@@ -769,34 +813,29 @@ let scorecards = [{"pairnum": 4, "pair": "", "board": [{"boardNum": 1, "isNS": t
 		boarddiv.className = "oneboarddiv";
 		boarddiv.appendChild(buildDeal(boardNum));
 
-		const travdiv = document.createElement('div');
-		travdiv.className = "onetravdiv";
-		travdiv.appendChild(buildTraveller(boardNum, pairnum));
+		boarddiv.appendChild(buildTraveller(boardNum, pairnum));
 		container.appendChild(boarddiv);
-		container.appendChild(travdiv);
 
 		const btnspacediv = document.createElement('div');
 		btnspacediv.className = "btnwrapper";
 
-		if (boardNum < eventInfo.numboards) {
-			const fwdbddiv = document.createElement('div');
-			fwdbddiv.className = "bdlinkfwd";
-			const fwdlink = document.createElement('a');
-			fwdlink.href = '#';
-			fwdlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum + 1, pairnum) };
-			fwdlink.text = 'Next->   ';
-			fwdbddiv.appendChild(fwdlink);
-			btnspacediv.appendChild(fwdbddiv);
+		const backlink = document.createElement('button');
+		backlink.className = "nav-btn";
+		backlink.href = '#';
+		backlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum - 1, pairnum) };
+		backlink.innerHTML = '&laquo; Prev';
+		btnspacediv.appendChild(backlink);
+		if (boardNum <= 1) {
+			backlink.style.visibility = 'hidden';
 		}
-		if (boardNum > 1) {
-			const backbddiv = document.createElement('div');
-			backbddiv.className = "bdlinkbck";
-			const backlink = document.createElement('a');
-			backlink.href = '#';
-			backlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum - 1, pairnum) };
-			backlink.text = '   <-Prev';
-			backbddiv.appendChild(backlink);
-			btnspacediv.appendChild(backbddiv);
+		const fwdlink = document.createElement('button');
+		fwdlink.className = "nav-btn";
+		fwdlink.href = '#';
+		fwdlink.onclick = function(event) { event.preventDefault(); boardClick(boardNum + 1, pairnum) };
+		fwdlink.innerHTML = 'Next &raquo;';
+		btnspacediv.appendChild(fwdlink);
+		if (boardNum >= eventInfo.numboards) {
+			fwdlink.style.visibility = 'hidden';
 		}
 		container.appendChild(btnspacediv);
 	}
