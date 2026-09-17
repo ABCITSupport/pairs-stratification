@@ -6,6 +6,7 @@ body { font-family: verdana; font-size: small; min-width: 615px; max-width: 1000
 .table-cell-link { padding: 10px 8px; }
 div.stablediv { margin: 0 10px 10px 0; min-width: 610px; }
 div.boarddiv { margin-bottom: 10px; max-width: 600px; display: inline-block; }
+div.oneboarddiv { width: 410px; }
 div.backlink { clear: both; }
 div.scorewrapperdiv { margin: 10px 0 10px 0; }
 div.btnwrapper { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; gap: 12px; }
@@ -13,19 +14,18 @@ th { background: #647498; color: white; padding: 0px 4px 0px 4px; border: none }
 table.dealtable { font-size: 1.1em; border-collapse: collapse; width: 100% }
 table.dealtable th { background: #647498; color: white; padding: 0px 4px 0px 4px; border: none }
 table.dealtable td { padding: 4px; }
-table.dealtable td.dealcenter { padding: 4px; text-align: center; }
-table.dealtable td.northhand, table.dealtable td.southhand { padding-left: 0px; width: 80px; }
+table.dealtable td.dealcenter { padding: 4px; width: 132px; }
+table.dealtable td.northhand, table.dealtable td.southhand { padding-left: 0px; }
 table.dealtable td.westhand { padding-left: 20px; width: 100px; }
 table.dealtable td.easthand { padding-left: 20px }
-table.dealtable td.dealcenter { padding-left: 0px; padding-right: 0px; background:#38904820; }
 table.scorecardtable { border-collapse: collapse; max-width: 620px; }
 table.scorecardtable th { padding: 4px 4px 4px 4px; }
 table.scorecardtable a { color: black; cursor: pointer; text-decoration: unset; }
-table.travellertable { font-size: 1em; border: 1px solid #ddd; border-collapse: collapse; text-align: center }
+table.travellertable { font-size: 1em; border: 1px solid #ddd; border-collapse: collapse; text-align: center; width: 100%; }
 table.travellertable td { border: 1px solid #ddd; margin-bottom: 5px; padding: 3px 10px; }
 table.travellertable td.scorecell { min-width: 25px; }
 table.dealtable td.dealinfo { font-size: 0.9em; vertical-align: top; }
-table.ddtable { font-size: 0.8em; border: 0; border-collapse: collapse; width: 60%; margin-left: 10px; }
+table.ddtable { font-size: 0.8em; border: 0; border-collapse: collapse; width: 110px; margin-left: 10px; margin-right: 20px; }
 table.ddtable th { background: transparent; color: black; padding: 16px 8px 0 0; }
 table.ddtable td { padding: 0 8px 0 0; }
 .btnspace { padding-top: 10px; }
@@ -71,6 +71,8 @@ background-color: #cbd5e1;
     .table.scorecardtable th {
         font-size: 18px;
     }
+    table.ddtable { padding: 4px; margin-right: 40px; }
+    div.oneboarddiv { width: 500px; }
 }
 .backlink { display: inline-block; padding: 10px; background-color: #a0a0a0; border-radius: 6px; transition: background-color 0.2s ease; }
 .backlink:hover, .bdlinkfwd:hover, .bdlinkbck:hover { background-color: #647498; }

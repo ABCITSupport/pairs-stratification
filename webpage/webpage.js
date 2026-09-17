@@ -421,7 +421,7 @@ function buildDeal(boardNum) {
 		table.appendChild(thead);
 	}
 	if (typeof deals !== "undefined") {
-		// The table body is 3x4 cells
+		// The table body is 3x3 cells
 		const tbody = document.createElement('tbody');
 		// Top row has board info, then North, then a blank cell
 		{
@@ -430,10 +430,6 @@ function buildDeal(boardNum) {
 				const td = document.createElement('td');
 				td.innerHTML = 'Dealer: ' + boardData.dealer + '<br>Vul: ' + boardData.vulnerability;
 				td.className = 'dealinfo';
-				row.appendChild(td);
-			}
-			{
-				const td = document.createElement('td');
 				row.appendChild(td);
 			}
 			row.append(buildHand(deal[0], 'northhand'));
@@ -449,9 +445,8 @@ function buildDeal(boardNum) {
 			row.append(buildHand(deal[3], 'westhand'));
 			{
 				const td = document.createElement('td');
-				td.innerHTML = 'N<br><br>W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;E<br><br>S';
+				td.innerHTML = '<img src="./tableimg.png" alt="Table center">';
 				td.className = 'dealcenter';
-				td.setAttribute('colspan', '2');
 				row.appendChild(td);
 			}
 			row.append(buildHand(deal[1], 'easthand'));
@@ -505,11 +500,12 @@ function buildDeal(boardNum) {
 				ddtable.appendChild(ddtbody);
 				row.appendChild(ddtable);
 			}
+			row.append(buildHand(deal[2], 'southhand'));
+			tbody.appendChild(row);
 			{
 				const td = document.createElement('td');
 				row.appendChild(td);
 			}
-			row.append(buildHand(deal[2], 'southhand'));
 			tbody.appendChild(row);
 		}
 		table.appendChild(tbody);
