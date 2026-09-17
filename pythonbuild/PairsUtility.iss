@@ -31,6 +31,7 @@ Source:"webpage\SingleFileTmpl.html"; DestDir:"{app}"; Flags: ignoreversion
 Source:"webpage\TinyFileTmpl.html"; DestDir:"{app}"; Flags: ignoreversion
 Source:"webpage\webpage.css"; DestDir:"{app}"; Flags: ignoreversion
 Source:"webpage\webpage.js"; DestDir:"{app}"; Flags: ignoreversion
+Source:"webpage\tableimg.png"; DestDir:"{app}"; Flags: ignoreversion
 Source:"readme.txt"; DestDir:"{app}"; Flags: ignoreversion
 Source:"dist\PairsStrat\_internal\*"; DestDir:"{app}\_internal"; Flags: ignoreversion recursesubdirs
 Source: "resources\PairsStratificationAppIco.ico"; DestDir: "{app}\resources"
